@@ -1,11 +1,20 @@
 {
   "month": "2026-08",
-  "updatedAt": "2026-08-04",
+  "updatedAt": "2026-08-22",
   "partial": true,
   "dbLand": 0,
-  "qdb": 2,
-  "mergedCandidates": 2,
-  "added": 0,
-  "judgments": {},
-  "brands": {}
+  "qdb": 21,
+  "mergedCandidates": 21,
+  "added": 19,
+  "judgments": {
+    "사용자검토필요": 19
+  },
+  "brands": {
+    "개인": 12,
+    "워시팡팡": 3,
+    "이지워시": 1,
+    "워시프렌즈": 1,
+    "워시엔조이": 1,
+    "크린토피아": 1
+  }
 }
