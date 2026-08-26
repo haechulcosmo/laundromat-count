@@ -6,6 +6,7 @@
   const UPDATE_POLL_FAST_MS = 5000;
   const APP_DATA_POLL_MS = 60000;
   const DEFAULT_UPDATE_BUTTON_TEXT = "데이터 업데이트";
+  const REQUEST_STALE_MS = 15 * 60 * 1000;
 
   let updateButton = null;
   let updatePollTimer = null;
@@ -86,14 +87,49 @@
     }
   }
 
+  function parseStatusTimestamp(value) {
+    if (!value || typeof value !== "string") return null;
+    const native = Date.parse(value);
+    if (!Number.isNaN(native)) return native;
+    const match = value.match(
+      /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})(?::(\d{2}))?\s*KST$/,
+    );
+    if (!match) return null;
+    const [, year, month, day, hour, minute, second = "00"] = match;
+    return Date.UTC(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour) - 9,
+      Number(minute),
+      Number(second),
+    );
+  }
+
+  function isRequestedStale(status) {
+    if (!status || status.state !== "requested") return false;
+    if (status.stale) return true;
+    const requestedAt = parseStatusTimestamp(status.requestedAt);
+    if (!requestedAt) return false;
+    return Date.now() - requestedAt > REQUEST_STALE_MS;
+  }
+
   function setUpdateButtonState(status) {
     if (!updateButton) return;
-    const busy = status?.state === "requested" || status?.state === "running";
-    updateButton.disabled = busy;
-    updateButton.textContent = busy ? "업데이트 진행 중..." : DEFAULT_UPDATE_BUTTON_TEXT;
-    updateButton.title = busy
+    const requested = status?.state === "requested";
+    const running = status?.state === "running";
+    const staleRequest = isRequestedStale(status);
+    updateButton.disabled = running;
+    updateButton.textContent = running
+      ? "업데이트 진행 중..."
+      : requested && !staleRequest
+        ? "업데이트 요청 접수됨"
+        : DEFAULT_UPDATE_BUTTON_TEXT;
+    updateButton.title = running
       ? `${status?.month || "이번 달"} 데이터 업데이트가 진행 중입니다.`
-      : "오늘 기준 최신 자료까지 갱신 요청합니다. 매월 1일 자동 갱신도 함께 동작합니다.";
+      : requested && !staleRequest
+        ? `${status?.month || "이번 달"} 데이터 업데이트 요청이 접수되었습니다. 자동 반영까지 최대 5분 정도 걸릴 수 있습니다.`
+        : "오늘 기준 최신 자료까지 갱신 요청합니다. 매월 1일 자동 갱신도 함께 동작합니다.";
   }
 
   function syncPeriodToLatestMonth(beforeData, afterData) {
@@ -186,12 +222,12 @@
     try {
       const payload = await api("/api/update", { method: "POST", body: "{}" });
       const status = payload.status || {};
-      notice(`${status.month || "이번 달"} 데이터 업데이트 요청이 접수되었습니다.`);
+      notice(`${status.month || "이번 달"} 데이터 업데이트 요청이 접수되었습니다. 자동 반영까지 최대 5분 정도 걸릴 수 있습니다.`);
       setUpdateButtonState(status);
       startUpdatePolling(true);
     } catch (error) {
       const message = String(error).includes("429")
-        ? "이미 업데이트 요청이 진행 중입니다. 잠시 후 다시 확인해 주세요."
+        ? "이미 업데이트 요청이 접수되어 있습니다. 잠시 후 다시 확인해 주세요."
         : "업데이트 요청에 실패했습니다. 잠시 후 다시 시도해 주세요.";
       notice(message, "error");
       button.disabled = false;
