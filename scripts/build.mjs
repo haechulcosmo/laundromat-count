@@ -33,7 +33,9 @@ const serverCode = `const files = {
 };
 
 const backendOrigin = "https://thelaundry-market-dashboard.thelaundry-market-2026.workers.dev";
-const repoAppDataUrl = "https://raw.githubusercontent.com/haechulcosmo/laundromat-count/main/index.html";
+// 월별 자동 수집 작업은 저장소의 기본 브랜치(master)에 결과를 반영한다.
+// 대시보드도 같은 원본을 읽어야 모든 사용자가 동일한 최신 데이터를 본다.
+const repoAppDataUrl = "https://raw.githubusercontent.com/haechulcosmo/laundromat-count/master/index.html";
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",
