@@ -55,7 +55,7 @@ jobs:
 
           try:
               request = urllib.request.Request(
-                  "https://thelaundry-market-dashboard-2026.cosmogpt1.chatgpt.site/api/update",
+                  "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update",
                   headers={
                       "User-Agent": "Mozilla/5.0",
                       "Accept": "application/json",
@@ -116,7 +116,7 @@ jobs:
           }, ensure_ascii=False).encode("utf-8")
 
           request = urllib.request.Request(
-              "https://thelaundry-market-dashboard-2026.cosmogpt1.chatgpt.site/api/update/complete",
+              "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update/complete",
               data=payload,
               method="POST",
               headers={
@@ -223,7 +223,7 @@ jobs:
           }, ensure_ascii=False).encode("utf-8")
 
           request = urllib.request.Request(
-              "https://thelaundry-market-dashboard-2026.cosmogpt1.chatgpt.site/api/update/complete",
+              "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update/complete",
               data=payload,
               method="POST",
               headers={

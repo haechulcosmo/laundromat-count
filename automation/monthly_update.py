@@ -213,7 +213,7 @@ def dbland_page(page: int, items_per_page: int = 50) -> tuple[list[dict], int]:
     if not payload.get("data"):
         try:
             response = SESSION.get(
-                "https://thelaundry-market-dashboard.thelaundry-market-2026.workers.dev/api/source/dbland",
+                "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/source/dbland",
                 params={"page": page},
                 headers={"x-update-callback": "c7ef1d9a4b6240f69837e2ab51d2c8f4"},
                 timeout=35,
