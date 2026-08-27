@@ -11,15 +11,9 @@ const QDB_URL = "https://qdb.kr/db/place.php?cate_3=%EC%85%80%ED%94%84%EB%B9%A8%
 const STALE_MS = 2 * 60 * 60 * 1000;
 
 function nowKstMonth() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit" })
-    .format(new Date())
-    .replace("/", "-");
-}
-
-function kstRequestedAt() {
-  const pieces = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+  const pieces = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit" }).formatToParts(new Date());
   const value = Object.fromEntries(pieces.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
-  return `${value.year}-${value.month}-${value.day} ${value.hour}:${value.minute} KST`;
+  return `${value.year}-${value.month}`;
 }
 
 function stale(status) {
@@ -85,7 +79,7 @@ export const api = onRequest(
         if (current?.month === month && ["requested", "running"].includes(current.state) && !stale(current)) {
           return res.status(429).json({ error: "이미 같은 달 데이터 업데이트가 진행 중입니다. 잠시 후 다시 확인해 주세요.", status: statusSummary(current) });
         }
-        const status = { state: "requested", month, requestedAt: kstRequestedAt(), requestedBy: "dashboard" };
+        const status = { state: "requested", month, requestedAt: new Date().toISOString(), requestedBy: "dashboard" };
         await db.doc("dashboard/updateStatus").set(status);
         return res.status(202).json({ ok: true, status: statusSummary(status) });
       }
