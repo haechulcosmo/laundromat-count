@@ -55,7 +55,7 @@ jobs:
 
           try:
               request = urllib.request.Request(
-                  "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update",
+                  "https://marketresearch--marketresearch-ff4fc.asia-east1.hosted.app/api/update",
                   headers={
                       "User-Agent": "Mozilla/5.0",
                       "Accept": "application/json",
@@ -116,7 +116,7 @@ jobs:
           }, ensure_ascii=False).encode("utf-8")
 
           request = urllib.request.Request(
-              "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update/complete",
+              "https://marketresearch--marketresearch-ff4fc.asia-east1.hosted.app/api/update/complete",
               data=payload,
               method="POST",
               headers={
@@ -176,15 +176,6 @@ jobs:
             git push
           fi
 
-      - name: 갱신된 대시보드 배포
-        if: steps.gate.outputs.run == 'true'
-        continue-on-error: true
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_DEPLOY_TOKEN }}
-          accountId: 5c79c5d1542add21beb7611104f4050d
-          command: deploy
-
       - name: 업데이트 완료/실패 상태 알림
         if: always() && steps.gate.outputs.run == 'true'
         env:
@@ -223,7 +214,7 @@ jobs:
           }, ensure_ascii=False).encode("utf-8")
 
           request = urllib.request.Request(
-              "https://asia-northeast3-marketresearch-ff4fc.cloudfunctions.net/api/update/complete",
+              "https://marketresearch--marketresearch-ff4fc.asia-east1.hosted.app/api/update/complete",
               data=payload,
               method="POST",
               headers={

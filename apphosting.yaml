@@ -1,0 +1,17 @@
+runConfig:
+  minInstances: 0
+  maxInstances: 1
+  concurrency: 20
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  - variable: APP_ENV
+    value: production
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: UPDATE_CALLBACK_TOKEN
+    secret: UPDATE_CALLBACK_TOKEN
+    availability:
+      - RUNTIME
