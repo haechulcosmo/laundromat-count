@@ -1,18 +1,17 @@
 {
-  "month": "2026-08",
-  "updatedAt": "2026-09-01",
-  "partial": false,
-  "dbLand": 0,
-  "qdb": 31,
-  "mergedCandidates": 31,
-  "added": 10,
+  "month": "2026-09",
+  "updatedAt": "2026-09-03",
+  "partial": true,
+  "dbLand": 6,
+  "qdb": 1,
+  "mergedCandidates": 7,
+  "added": 7,
   "judgments": {
-    "사용자검토필요": 10
+    "사용자검토필요": 7
   },
   "brands": {
-    "워시엔조이": 1,
-    "워시프렌즈": 2,
-    "개인": 6,
-    "버블맨": 1
+    "개인": 5,
+    "워시팡팡": 1,
+    "크린토피아": 1
   }
 }
