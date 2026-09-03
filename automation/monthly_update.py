@@ -1112,6 +1112,20 @@ def main() -> int:
 
     db_rows = collect_dbland(month)
     qdb_rows = collect_qdb(month)
+    if not db_rows:
+        summary = {
+            "month": month,
+            "updatedAt": datetime.now(KST).strftime("%Y-%m-%d"),
+            "partial": True,
+            "dbLand": 0,
+            "qdb": len(qdb_rows),
+            "mergedCandidates": 0,
+            "added": 0,
+            "error": "DB랜드 원본을 확보하지 못해 QDB 단독 반영을 중단했습니다.",
+        }
+        SUMMARY.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 2
     merged = merge_sources(db_rows, qdb_rows)
     current_month_ids: set[tuple[str, str, str]] = set()
     for record in existing_records:
