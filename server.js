@@ -51,6 +51,25 @@ app.get("/api/update", async (_req, res, next) => {
   try { res.set("cache-control", "no-store").json({ status: await status() }); } catch (error) { next(error); }
 });
 
+app.get("/api/source/dbland", async (req, res, next) => {
+  try {
+    const page = Math.max(1, Math.min(1000, Number(req.query.page || 1)));
+    const body = new URLSearchParams({ type: "place", sch_ca_id: "021302", itemsPerPage: "50", currentPage: String(page) });
+    const response = await fetch("https://db-land.kr/archive/proc/get_list.php", {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "x-requested-with": "XMLHttpRequest",
+        referer: "https://db-land.kr/archive/place/021302/1",
+        "user-agent": "Mozilla/5.0",
+      },
+      body,
+    });
+    if (!response.ok) throw new Error(`DB랜드 응답 오류 (${response.status})`);
+    res.set("cache-control", "no-store").json(await response.json());
+  } catch (error) { next(error); }
+});
+
 app.post("/api/update", async (_req, res, next) => {
   try {
     const month = currentMonth();
