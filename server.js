@@ -22,6 +22,31 @@ async function status() {
   return snap.exists ? snap.data() : null;
 }
 
+function extractAppData(source) {
+  const marker = /(?:const|let)\s+APP_DATA\s*=\s*/.exec(source);
+  if (!marker) throw new Error("원본 데이터 형식을 찾지 못했습니다.");
+  const start = marker.index + marker[0].length;
+  let depth = 0;
+  let quoted = null;
+  let escaped = false;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (quoted) {
+      if (escaped) escaped = false;
+      else if (char === "\\\\") escaped = true;
+      else if (char === quoted) quoted = null;
+      continue;
+    }
+    if (char === '"' || char === "'") { quoted = char; continue; }
+    if (char === "{") depth += 1;
+    if (char === "}") {
+      depth -= 1;
+      if (depth === 0) return JSON.parse(source.slice(start, index + 1));
+    }
+  }
+  throw new Error("원본 데이터 끝을 찾지 못했습니다.");
+}
+
 app.get("/api/update", async (_req, res, next) => {
   try { res.set("cache-control", "no-store").json({ status: await status() }); } catch (error) { next(error); }
 });
@@ -56,9 +81,7 @@ app.get("/api/app-data", async (_req, res, next) => {
   try {
     const response = await fetch(repoDataUrl, { headers: { "user-agent": "thelaundry-market-dashboard" } });
     const source = await response.text();
-    const match = source.match(/(?:const|let)\s+APP_DATA\s*=\s*(\{[\s\S]*?\});\s*\n/);
-    if (!match) throw new Error("원본 데이터 형식을 찾지 못했습니다.");
-    res.set("cache-control", "no-store").json({ appData: JSON.parse(match[1]) });
+    res.set("cache-control", "no-store").json({ data: extractAppData(source) });
   } catch (error) { next(error); }
 });
 
