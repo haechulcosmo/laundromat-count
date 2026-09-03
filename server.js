@@ -98,7 +98,9 @@ app.post("/api/update/complete", async (req, res, next) => {
 
 app.get("/api/app-data", async (_req, res, next) => {
   try {
-    const response = await fetch(repoDataUrl, { headers: { "user-agent": "thelaundry-market-dashboard" } });
+    const response = await fetch(`${repoDataUrl}?refresh=${Date.now()}`, {
+      headers: { "user-agent": "thelaundry-market-dashboard", "cache-control": "no-cache" },
+    });
     const source = await response.text();
     res.set("cache-control", "no-store").json({ data: extractAppData(source) });
   } catch (error) { next(error); }
