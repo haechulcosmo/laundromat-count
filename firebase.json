@@ -21,5 +21,10 @@
   },
   "firestore": {
     "rules": "firestore.rules"
+  },
+  "apphosting": {
+    "backendId": "marketresearch",
+    "rootDir": "/",
+    "ignore": ["node_modules", "functions/node_modules", ".git", "firebase-public", "dist", ".firebase"]
   }
 }
