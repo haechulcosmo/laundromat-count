@@ -644,8 +644,9 @@ $("csvBtn").addEventListener("click",()=>{
 async function bootDashboard() {
   rebuildAppState();
   await loadLatestAppData();
-  $("periodStart").value = APP_DATA.auditedFrom || detailMonths[0] || "";
-  $("periodEnd").value = APP_DATA.completedThrough || detailMonths[detailMonths.length-1] || "";
+  const latestMonth = detailMonths[detailMonths.length-1] || APP_DATA.completedThrough || "";
+  $("periodStart").value = latestMonth;
+  $("periodEnd").value = latestMonth;
   renderHeaderMeta();
   refresh();
 }
