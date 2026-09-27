@@ -1,21 +1,15 @@
 {
   "month": "2026-09",
-  "updatedAt": "2026-09-27",
+  "updatedAt": "2026-09-28",
   "partial": true,
   "dbLand": 6,
-  "qdb": 28,
-  "mergedCandidates": 31,
-  "added": 27,
+  "qdb": 29,
+  "mergedCandidates": 32,
+  "added": 1,
   "judgments": {
-    "사용자검토필요": 27
+    "사용자검토필요": 1
   },
   "brands": {
-    "개인": 15,
-    "워시팡팡": 3,
-    "워시프렌즈": 3,
-    "빨래방24": 1,
-    "워시엔조이": 2,
-    "런드리24": 2,
-    "호텔런드리": 1
+    "개인": 1
   }
 }
