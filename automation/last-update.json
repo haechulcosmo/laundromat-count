@@ -1,11 +1,26 @@
 {
-  "month": "2026-09",
-  "updatedAt": "2026-10-01",
-  "partial": false,
-  "dbLand": 6,
-  "qdb": 29,
-  "mergedCandidates": 32,
-  "added": 0,
-  "judgments": {},
-  "brands": {}
+  "month": "2026-11",
+  "updatedAt": "2026-11-15",
+  "partial": true,
+  "dbLand": 54,
+  "qdb": 16,
+  "mergedCandidates": 57,
+  "added": 56,
+  "judgments": {
+    "사용자검토필요": 56
+  },
+  "brands": {
+    "개인": 36,
+    "워시프렌즈": 5,
+    "워시팡팡": 2,
+    "위니아24크린샵": 1,
+    "크린업24": 2,
+    "이지워시": 1,
+    "워시엔조이": 2,
+    "크린토피아": 2,
+    "호텔런드리": 2,
+    "아쿠아워시": 1,
+    "더런드리": 1,
+    "런드리24": 1
+  }
 }
