@@ -8,7 +8,8 @@ on:
         required: false
         type: string
   schedule:
-    - cron: "0 0 1 * *"
+    # 매월 1일 09:17 KST, 전월 자료 갱신
+    - cron: "17 0 1 * *"
     - cron: "*/5 * * * *"
 
 permissions:
@@ -48,7 +49,11 @@ jobs:
           event = os.environ.get("EVENT_NAME", "")
           schedule = os.environ.get("EVENT_SCHEDULE", "")
           month = (os.environ.get("INPUT_MONTH", "") or "").strip()
-          run = event == "workflow_dispatch" or schedule == "0 0 1 * *"
+          monthly_schedule = schedule == "17 0 1 * *"
+          run = event == "workflow_dispatch" or monthly_schedule
+          if monthly_schedule:
+              now = datetime.now(KST)
+              month = (now.replace(day=1) - timedelta(days=1)).strftime("%Y-%m")
           requested = False
           requested_at = ""
           current_status = {}
