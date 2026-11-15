@@ -151,7 +151,8 @@ jobs:
         env:
           UPDATE_MONTH: ${{ steps.gate.outputs.month }}
         run: |
-          python -m automation.resolve_reviews "$UPDATE_MONTH"
+          # 네이버 검색 지연이 전체 데이터 반영을 막지 않도록 자동 보정은 제한 시간 안에서만 실행합니다.
+          timeout 180 python -m automation.resolve_reviews "$UPDATE_MONTH" || echo "자동 검수 시간 제한: 수집 데이터는 계속 반영합니다."
           python automation/promote_confirmed_reviews.py
           python automation/repair_app_data.py
 
